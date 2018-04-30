@@ -12,7 +12,7 @@ authentication and common middlewares.
 1.  Rename the directory from express-api-template -> your-app-name.
 1.  Empty [`README.md`](README.md) and fill with your own content.
 1.  Move into the new project and `git init`.
-1.  Replace all instances of `'express-api-template'` with your app name. 
+1.  Replace all instances of `'express-api-template'` with your app name.
 1.  Install dependencies with `npm install`.
 1.  From the root of your repository, run the following commands. They will set a SECRET_KEY for development and testing.
  ```sh
@@ -29,14 +29,14 @@ authentication and common middlewares.
 
 Dependencies are stored in [`package.json`](package.json).
 
-The most important file for understanding the structure of the template is 
+The most important file for understanding the structure of the template is
 `server.js`. This is where the actual Express `app` object is created, where
 the middlewares and routes are registered, and more. To register a routefile,
 follow the pattern established here with `exampleRoutes` and `userRoutes`. If
 you want to add any middlewares to your app, do that here.
 
 The `app` directory contains models and route files. Models are simply Mongoose
-models. To create your own, follow the patterns established in 
+models. To create your own, follow the patterns established in
 `app/models/example.js`. Route files are somewhat similar to controllers in
 Rails, but they cover more functionality, including serialization and deciding
 which HTTP verbs to accept and what to do with them.
@@ -65,9 +65,8 @@ use `npm` anyway. These are the commands available:
 
 | Command                | Effect                                                                                                      |
 |------------------------|-------------------------------------------------------------------------------------------------------------|
-| `npm start`            | Starts the server.                                                                                          |
+| `npm run server`       | Starts a development server with `nodemon` that automatically refreshes when you change something.                                                                                         |
 | `npm test`             | Runs automated tests.                                                                                       |
-| `npm run dev-server`   | Starts a development server with `nodemon` that automatically refreshes when you change something.          |
 | `npm run debug-server` | Starts the server in debug mode, which will print lots of extra info about what's happening inside the app. |
 
 ## API
