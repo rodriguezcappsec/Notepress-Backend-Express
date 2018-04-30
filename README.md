@@ -82,8 +82,8 @@ own scripts to test your custom API.
 |--------|------------------------|-------------------|
 | POST   | `/sign-up`             | `users#signup`    |
 | POST   | `/sign-in`             | `users#signin`    |
-| PATCH  | `/change-password/:id` | `users#changepw`  |
-| DELETE | `/sign-out/:id`        | `users#signout`   |
+| PATCH  | `/change-password/` | `users#changepw`  |
+| DELETE | `/sign-out/`        | `users#signout`   |
 
 #### POST /sign-up
 
@@ -153,12 +153,12 @@ Content-Type: application/json; charset=utf-8
 }
 ```
 
-#### PATCH /change-password/:id
+#### PATCH /change-password/
 
 Request:
 
 ```sh
-curl --include --request PATCH http://localhost:4741/change-password/$ID \
+curl --include --request PATCH http://localhost:4741/change-password/ \
   --header "Authorization: Token token=$TOKEN" \
   --header "Content-Type: application/json" \
   --data '{
@@ -170,7 +170,7 @@ curl --include --request PATCH http://localhost:4741/change-password/$ID \
 ```
 
 ```sh
-ID=1 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/change-password.sh
+TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/change-password.sh
 ```
 
 Response:
@@ -179,17 +179,17 @@ Response:
 HTTP/1.1 204 No Content
 ```
 
-#### DELETE /sign-out/:id
+#### DELETE /sign-out/
 
 Request:
 
 ```sh
-curl --include --request DELETE http://localhost:4741/sign-out/$ID \
+curl --include --request DELETE http://localhost:4741/sign-out/ \
   --header "Authorization: Token token=$TOKEN"
 ```
 
 ```sh
-ID=1 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/sign-out.sh
+TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/sign-out.sh
 ```
 
 Response:
