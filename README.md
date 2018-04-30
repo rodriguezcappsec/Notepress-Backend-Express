@@ -14,6 +14,7 @@ authentication and common middlewares.
 1.  Move into the new project and `git init`.
 1.  Replace all instances of `'express-api-template'` with your app name.
 1.  Install dependencies with `npm install`.
+1.  Ensure that you have `nodemon` installed by running `npm install -g nodemon`.
 1.  From the root of your repository, run the following commands. They will set a SECRET_KEY for development and testing.
  ```sh
  echo SECRET_KEY_BASE_TEST=$(openssl rand -base64 66 | tr -d '\n') >>.env
