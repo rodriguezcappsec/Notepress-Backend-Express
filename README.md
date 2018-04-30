@@ -19,9 +19,7 @@ authentication and common middlewares.
  echo SECRET_KEY_BASE_TEST=$(openssl rand -base64 66 | tr -d '\n') >>.env
  echo SECRET_KEY_BASE_DEVELOPMENT=$(openssl rand -base64 66 | tr -d '\n' >> .env
  ```
-1.  Either run the API server with `npm start` OR if you want your code to be reloaded on
-    change, you should `npm install --global nodemon` and use `nodemon` instead of
-    `npm start`.
+1.  Ensure the API is functioning properly by running `npm run server`.
 1.  Once everything is working, make an initial commit.
 1.  Follow the steps in [express-api-deployment-guide](https://git.generalassemb.ly/ga-wdi-boston/express-api-deployment-guide)
 
