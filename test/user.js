@@ -70,6 +70,17 @@ describe('Users', () => {
         })
         .catch(() => done())
     })
+
+    it('should reject an empty string password', done => {
+      chai.request(server)
+        .post('/sign-up')
+        .send(Object.assign(userParams, { password: '' }))
+        .end((e, res) => {
+          res.should.have.status(422)
+          res.should.be.a('object')
+          res.body.should.have.property('errmsg')
+        })
+    })
   })
 
   describe('POST /sign-in', () => {
@@ -127,6 +138,13 @@ describe('Users', () => {
       }
     }
 
+    const badChangePwParams = {
+      passwords: {
+        old: 'WRONG',
+        new: '54321'
+      }
+    }
+
     before(done => {
       chai.request(server)
         .post('/sign-up')
@@ -163,6 +181,29 @@ describe('Users', () => {
           res.should.have.status(201)
           res.body.user.should.have.property('token')
           res.body.user.token.should.be.a('string')
+          token = res.body.user.token
+          done()
+        })
+    })
+
+    it('fails when the wrong password is provided', done => {
+      chai.request(server)
+        .patch('/change-password')
+        .set('Authorization', `Bearer ${token}`)
+        .send(badChangePwParams)
+        .end((e, res) => {
+          res.should.have.status(422)
+          done()
+        })
+    })
+
+    it('fails when the new password is an empty string', done => {
+      chai.request(server)
+        .patch('/change-password')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ passwords: { old: '54321', new: '' } })
+        .end((e, res) => {
+          res.should.have.status(422)
           done()
         })
     })
@@ -172,16 +213,24 @@ describe('Users', () => {
     let token
 
     before(done => {
+      User.remove({})
+        .then(() => done())
+    })
+
+    before(done => {
       chai.request(server)
         .post('/sign-up')
-        .send(updatedParams)
-        .end(() => done())
+        .send(userParams)
+        .end((e, r) => {
+          console.log(e)
+          done()
+        })
     })
 
     before(done => {
       chai.request(server)
         .post('/sign-in')
-        .send(updatedParams)
+        .send(userParams)
         .end((e, res) => {
           token = res.body.user.token
           done()
