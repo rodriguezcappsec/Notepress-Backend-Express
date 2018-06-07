@@ -25,17 +25,16 @@ const router = express.Router()
 // SIGN UP
 // POST /sign-up
 router.post('/sign-up', (req, res) => {
-  // generate a hash from the provided password
-  // this returns a promise
-  new Promise((resolve, reject) => {
-    const pw = req.body.credentials && req.body.credentials.password
-
-    if (!pw || pw.length < 1) {
-      reject(new BadParamsError())
-    } else {
-      resolve()
-    }
-  })
+  // start a promise chain, so that any errors will pass to `handle`
+  Promise.resolve(req.body.credentials)
+    // reject any requests where `credentials.password` is not present, or where
+    // the password is an empty string
+    .then(credentials => {
+      if (!credentials || !credentials.password) {
+        throw new BadParamsError()
+      }
+    })
+    // generate a hash from the provided password, returning a promise
     .then(() => bcrypt.hash(req.body.credentials.password, bcryptSaltRounds))
     .then(hash => {
       // return necessary params to create a user
@@ -75,8 +74,6 @@ router.post('/sign-in', (req, res) => {
       // if the passwords matched
       if (correctPassword) {
         // the token will be a 16 byte random hex string
-        // NOTE: this is secure enough for our purposes, but don't use this
-        // token generation method for your fintech startup
         const token = crypto.randomBytes(16).toString('hex')
         user.token = token
         // save the token to the DB as a property on user
