@@ -1,6 +1,5 @@
 process.env.TESTENV = true
 
-let mongoose = require("mongoose")
 let Example = require('../app/models/example.js')
 let User = require('../app/models/user')
 
@@ -9,7 +8,7 @@ const crypto = require('crypto')
 let chai = require('chai')
 let chaiHttp = require('chai-http')
 let server = require('../server')
-let should = chai.should()
+chai.should()
 
 chai.use(chaiHttp)
 
