@@ -27,15 +27,17 @@ const router = express.Router()
 router.post('/sign-up', (req, res) => {
   // generate a hash from the provided password
   // this returns a promise
-  bcrypt.hash(req.body.credentials.password, bcryptSaltRounds)
-    .then(hash => {
-      // make sure that the user didn't sign up with empty string password
-      // we have to do this inside the promise chain to be able to use the
-      // error handler
-      if (!req.body.credentials.password) {
-        throw new BadParamsError()
-      }
+  new Promise((resolve, reject) => {
+    const pw = req.body.credentials && req.body.credentials.password
 
+    if (!pw || pw.length < 1) {
+      reject(new BadParamsError())
+    } else {
+      resolve()
+    }
+  })
+    .then(() => bcrypt.hash(req.body.credentials.password, bcryptSaltRounds))
+    .then(hash => {
       // return necessary params to create a user
       return {
         email: req.body.credentials.email,
@@ -98,11 +100,14 @@ router.patch('/change-password', requireToken, (req, res) => {
   let user
   // `req.user` will be determined by decoding the token payload
   User.findById(req.user.id)
-    .then(record => {
-      user = record
-      // return a hash of the new password
-      return bcrypt.hash(req.body.passwords.new, bcryptSaltRounds)
+    .then(record => { user = record })
+    .then(() => bcrypt.compare(req.body.passwords.old, user.hashedPassword))
+    .then(correctPassword => {
+      if (!req.body.passwords.new || !correctPassword) {
+        throw new BadParamsError()
+      }
     })
+    .then(() => bcrypt.hash(req.body.passwords.new, bcryptSaltRounds))
     .then(hash => {
       // set and save the new hashed password in the DB
       user.hashedPassword = hash
