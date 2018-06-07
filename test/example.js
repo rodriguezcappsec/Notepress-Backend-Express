@@ -174,10 +174,8 @@ describe('Examples', () => {
     }
 
     before(async function () {
-      await Example.create(Object.assign(exampleParams, { owner: userId }))
-        .then(record => {
-          exampleId = record._id
-        })
+      const record = await Example.create(Object.assign(exampleParams, { owner: userId }))
+      exampleId = record._id
     })
 
     it('must be owned by the user', done => {
