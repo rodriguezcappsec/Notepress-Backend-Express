@@ -56,21 +56,22 @@ router.post('/sign-up', (req, res) => {
 // POST /sign-in
 router.post('/sign-in', (req, res) => {
   const pw = req.body.credentials.password
+  let user
 
   // find a user based on the email that was passed
   User.findOne({ email: req.body.credentials.email })
-    .then(user => {
+    .then(record => {
       // if we didn't find a user with that email, send 422
-      if (!user) {
+      if (!record) {
         throw new BadParamsError()
       }
+      // save the found user outside the promise chain
+      user = record
       // `bcrypt.compare` will return true if the result of hashing `pw`
       // is exactly equal to the hashed password stored in the DB
-      return Promise.all([bcrypt.compare(pw, user.hashedPassword), user])
+      return bcrypt.compare(pw, user.hashedPassword)
     })
-    .then(data => {
-      const user = data[1]
-      const correctPassword = data[0]
+    .then(correctPassword => {
       // if the passwords matched
       if (correctPassword) {
         // the token will be a 16 byte random hex string
@@ -97,13 +98,20 @@ router.patch('/change-password', requireToken, (req, res) => {
   let user
   // `req.user` will be determined by decoding the token payload
   User.findById(req.user.id)
+    // save user outside the promise chain
     .then(record => { user = record })
+    // check that the old password is correct
     .then(() => bcrypt.compare(req.body.passwords.old, user.hashedPassword))
+    // `correctPassword` will be true if hashing the old password ends up the
+    // same as `user.hashedPassword`
     .then(correctPassword => {
+      // throw an error if the new password is missing, an empty string,
+      // or the old password was wrong
       if (!req.body.passwords.new || !correctPassword) {
         throw new BadParamsError()
       }
     })
+    // hash the new password
     .then(() => bcrypt.hash(req.body.passwords.new, bcryptSaltRounds))
     .then(hash => {
       // set and save the new hashed password in the DB
@@ -117,7 +125,9 @@ router.patch('/change-password', requireToken, (req, res) => {
 })
 
 router.delete('/sign-out', requireToken, (req, res) => {
+  // create a new random token for the user, invalidating the current one
   req.user.token = crypto.randomBytes(16)
+  // save the token and respond with 204
   req.user.save()
     .then(() => res.sendStatus(204))
     .catch(err => handle(err, res))
