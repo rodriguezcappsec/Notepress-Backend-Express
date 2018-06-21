@@ -65,6 +65,8 @@ app.use(auth)
 // JS objects before they reach the route files.
 // The method `.use` sets up middleware for the Express application
 app.use(bodyParser.json())
+// this parses requests sent by `$.ajax`, which use a different content type
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // register route files
 app.use(exampleRoutes)
