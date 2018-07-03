@@ -25,6 +25,14 @@ const updatedUser = {
   }
 }
 
+const nonMatchingPasswordsUser = {
+  credentials: {
+    email: 'dont@type.good',
+    password: '12345',
+    password_confirmation: '54321'
+  }
+}
+
 let token = 'notrealtoken'
 
 describe('Users', () => {
@@ -64,6 +72,18 @@ describe('Users', () => {
       chai.request(server)
         .post('/sign-up')
         .send(Object.assign({}, user.credentials, { password: '', password_confirmation: '' }))
+        .end((e, res) => {
+          res.should.have.status(422)
+          res.should.be.a('object')
+          res.body.should.have.property('name')
+          done()
+        })
+    })
+
+    it('should reject users with non-matching passwords', done => {
+      chai.request(server)
+        .post('/sign-up')
+        .send(nonMatchingPasswordsUser)
         .end((e, res) => {
           res.should.have.status(422)
           res.should.be.a('object')
