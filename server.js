@@ -8,6 +8,7 @@ const cors = require("cors");
 const exampleRoutes = require("./app/routes/example_routes");
 const userRoutes = require("./app/routes/user_routes");
 const notes = require("./app/routes/notesRoutes.js");
+const todos = require("./app/routes/todoRoutes.js");
 
 // require database configuration logic
 // `db` will be the actual Mongo URI as a string
@@ -76,6 +77,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(exampleRoutes);
 app.use(userRoutes);
 app.use(notes);
+app.use(todos)
 
 // run API on designated port (4741 in this case)
 app.listen(port, () => {
