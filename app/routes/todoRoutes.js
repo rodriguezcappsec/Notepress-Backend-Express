@@ -21,7 +21,8 @@ router.get("/todos/:id", requireToken, (req, res) => {
 router.post("/todos", requireToken, (req, res) => {
   const newTodo = {
     todo: req.body.todo.todo,
-    noteID: req.body.todo.noteID
+    noteID: req.body.todo.noteID,
+    isCompleted: false
   };
   Todos.create(newTodo)
     .then(createdTodo => res.status(201).json({ todo: createdTodo }))

@@ -7,6 +7,9 @@ module.exports = mongoose.model(
         type: String,
         required: true
       },
+      isCompleted: {
+        type: Boolean
+      },
       noteID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Note",
