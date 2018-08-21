@@ -12,8 +12,7 @@ module.exports = mongoose.model(
       },
       noteID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Note",
-        required: true
+        ref: "Note"
       }
     },
     {
