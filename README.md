@@ -3,7 +3,7 @@
 
 ### User Stories
 
-- [User stories and more](https://trello.com/b/NWVfKvCU/notepress)
+- [User stories and technologies](https://trello.com/b/NWVfKvCU/notepress)
 
 ### Database Diagram 
 - [ERD](https://i.imgur.com/Qqe2gws.jpg)
