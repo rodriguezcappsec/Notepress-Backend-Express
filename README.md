@@ -19,3 +19,8 @@
 
 I developed this backend using NodeJs with Express. So far my favorite technology to use when building RESTful APis.
 
+### Deployed and Repo urls.
+
+- [Notepress](https://notepress-3188b.firebaseapp.com/)
+- [Notepress repository](https://github.com/rodriguezcoding/Notepress-app)
+
